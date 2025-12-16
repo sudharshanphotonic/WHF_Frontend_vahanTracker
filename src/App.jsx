@@ -1,5 +1,6 @@
-import InstallerDisplayRegister from "./InstallerDisplayRegister";
+
 import Dashboard from "./Dashboard";
+import InstallerDisplayRegister from "./pages/InstallerDisplayRegister";
 
 function App() {
   const params = new URLSearchParams(window.location.search);
