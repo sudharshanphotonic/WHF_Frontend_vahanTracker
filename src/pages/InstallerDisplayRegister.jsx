@@ -24,7 +24,6 @@ export default function InstallerDisplayRegister() {
   });
 
   const [locationError, setLocationError] = useState("");
-  const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
 
   // ❌ Block if QR not scanned
@@ -78,8 +77,8 @@ export default function InstallerDisplayRegister() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  /* ================= SAVE INSTALLATION ================= */
-  const handleSaveInstallation = async () => {
+  /* ================= SAVE (PREVIEW ONLY) ================= */
+  const handleSaveInstallation = () => {
     if (!form.displayName || !form.locationName) {
       alert("Please fill all required fields");
       return;
@@ -90,53 +89,29 @@ export default function InstallerDisplayRegister() {
       return;
     }
 
-    setSaving(true);
-
-    const payload = {
-      deviceId,
-      displayName: form.displayName,
-      locationName: form.locationName,
-      installerName: form.installerName,
-      latitude: form.latitude,
-      longitude: form.longitude,
-      method: "physical",
-    };
-
-    try {
-      const res = await fetch("http://localhost:8000/displays", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.detail || "Installation failed");
-        setSaving(false);
-        return;
-      }
-
-      setSuccess(true);
-    } catch (err) {
-      alert("Backend not reachable");
-    } finally {
-      setSaving(false);
-    }
+    // ✅ PREVIEW FIRST — NO BACKEND CALL
+    setSuccess(true);
   };
 
-  /* ================= SUCCESS SCREEN ================= */
+  /* ================= SUCCESS / PREVIEW SCREEN ================= */
   if (success) {
     return (
       <div style={{ maxWidth: 450, padding: 20 }}>
-        <h2>✅ Installation Complete</h2>
-        <p>Display has been successfully registered.</p>
+        <h2>✅ Installation Preview</h2>
+        <p>(Not saved to backend yet)</p>
 
         <div style={{ background: "#f2f2f2", padding: 10 }}>
           <p><b>Device:</b> {deviceId}</p>
           <p><b>Display:</b> {form.displayName}</p>
           <p><b>Location:</b> {form.locationName}</p>
+          <p><b>Installer:</b> {form.installerName}</p>
+          <p><b>Latitude:</b> {form.latitude}</p>
+          <p><b>Longitude:</b> {form.longitude}</p>
         </div>
+
+        <p style={{ color: "green", marginTop: 10 }}>
+          ✔ Physical installation flow verified
+        </p>
       </div>
     );
   }
@@ -231,10 +206,9 @@ export default function InstallerDisplayRegister() {
 
           <button
             onClick={handleSaveInstallation}
-            disabled={saving}
             style={{ marginTop: 20, padding: "10px 15px" }}
           >
-            {saving ? "Saving..." : "💾 Save Installation"}
+            💾 Save Installation (Preview)
           </button>
         </>
       )}
