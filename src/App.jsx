@@ -1,9 +1,17 @@
-import { useState } from "react";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
+import InstallerDisplayRegister from "./InstallerDisplayRegister";
+import Dashboard from "./Dashboard";
 
-export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+function App() {
+  const params = new URLSearchParams(window.location.search);
+  const deviceId = params.get("deviceId");
 
-  return loggedIn ? <Home /> : <Login onLogin={() => setLoggedIn(true)} />;
+  // INSTALLER FLOW (QR scanned)
+  if (deviceId) {
+    return <InstallerDisplayRegister />;
+  }
+
+  // NORMAL WEB APP FLOW
+  return <Dashboard />;
 }
+
+export default App;

@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+/* 🔐 LOCAL INSTALLER CREDENTIALS */
+const INSTALLER_USERNAME = "psdas";
+const INSTALLER_PASSWORD = "psdas";
+
 export default function InstallerDisplayRegister() {
   const params = new URLSearchParams(window.location.search);
   const deviceId = params.get("deviceId");
@@ -9,7 +13,7 @@ export default function InstallerDisplayRegister() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState("");
 
-  // Block if QR not scanned
+  // ❌ Block if QR not scanned
   if (!deviceId) {
     return <h3>❌ Scan QR from display to continue</h3>;
   }
@@ -18,7 +22,7 @@ export default function InstallerDisplayRegister() {
     const u = username.trim().toLowerCase();
     const p = password.trim();
 
-    if (u === "psdas" && p === "psdas") {
+    if (u === INSTALLER_USERNAME && p === INSTALLER_PASSWORD) {
       setLoggedIn(true);
       setError("");
     } else {
@@ -59,7 +63,7 @@ export default function InstallerDisplayRegister() {
           )}
         </>
       ) : (
-        <h3>✅ Login Success – Continue Installation</h3>
+        <h3>✅ Login Success – Installer Page Only</h3>
       )}
     </div>
   );
