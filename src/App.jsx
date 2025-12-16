@@ -1,5 +1,6 @@
 
-import Dashboard from "./Dashboard";
+
+import Dashboard from "./pages/Dashboard";
 import InstallerDisplayRegister from "./pages/InstallerDisplayRegister";
 
 function App() {
