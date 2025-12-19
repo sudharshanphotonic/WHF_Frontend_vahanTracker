@@ -17,6 +17,10 @@ export default function Sidebar({ setView }) {
         Add Bus
       </button>
       <br /><br />
+      <button onClick={() => setView("addRoute")}>
+        Add Routes
+      </button>
+      <br /><br />  
 
       <button onClick={() => setView("addStop")}>
         Add Stop

@@ -1,0 +1,144 @@
+.route-wrapper {
+  padding: 30px;
+  background: #ecf0f1;
+  border-radius: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.route-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+/* TIMELINE */
+.timeline-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LINE */
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  transform: translateY(-50%);
+  z-index: 0;
+  transition: background 0.4s ease;
+}
+
+/* BASE DOT */
+.dot {
+  position: relative;
+  z-index: 1;
+  border-radius: 50%;
+  background: #aeb6bf;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+/* BIG START & END */
+.dot.start,
+.dot.end {
+  width: 34px;
+  height: 34px;
+  border: 4px solid #2c3e50;
+  background: #ecf0f1;
+}
+
+/* MIDDLE STOPS */
+.dot.middle {
+  width: 22px;
+  height: 22px;
+}
+
+/* ACTIVE */
+.dot.active {
+  background: #2c3e50;
+}
+
+.dot.start.active,
+.dot.end.active {
+  background: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.dot:hover {
+  transform: scale(1.15);
+}
+
+/* LABEL */
+.dot-label {
+  position: absolute;
+  top: -75px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-45deg);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #2c3e50;
+}
+
+/* ACTIONS */
+.dot-actions {
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.dot-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+/* ADD BUTTON */
+.add-stop {
+  margin-top: 40px;
+  padding: 12px 24px;
+  background: #2c3e50;
+  color: white;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .timeline-container {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .timeline-line {
+    display: none;
+  }
+
+  .dot {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+  }
+
+  .dot-label {
+    position: static;
+    transform: none;
+    margin-left: 10px;
+  }
+
+  .dot-actions {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
