@@ -2,3 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+.input {
+  @apply w-full px-4 py-2 rounded-md 
+         border border-slate-300 
+         text-slate-800
+         focus:outline-none 
+         focus:ring-2 focus:ring-blue-500 
+         transition;
+}
+
+.input.small {
+  @apply py-1.5 text-sm;
+}
+
+.search {
+  @apply w-56 px-3 py-2 rounded-md border border-slate-300
+         text-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+

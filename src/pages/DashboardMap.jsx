@@ -1,8 +1,8 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import BaseMap from "../components/Basemap/Basemap";
 
-// 🔧 Fix marker icon
+// 🔧 Fix default Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -15,8 +15,7 @@ L.Icon.Default.mergeOptions({
 
 // 🔵 Physical marker
 const blueIcon = new L.Icon({
-  iconUrl:
-    "https://cdn-icons-png.flaticon.com/512/1178/1178847.png",
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/1178/1178847.png",
   shadowUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
@@ -25,36 +24,16 @@ const blueIcon = new L.Icon({
 
 // 🟡 Preview marker
 const yellowIcon = new L.Icon({
-  iconUrl:
-    "https://cdn-icons-png.flaticon.com/512/1042/1042263.png",
-  // shadowUrl:
-  //   "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/1042/1042263.png",
   iconSize: [50, 41],
   iconAnchor: [12, 41],
 });
 
-/* ✅ MAP RECENTER CONTROLLER (DO NOT REMOVE) */
-function RecenterMap({ center }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (center) {
-      map.flyTo(center, 13, { duration: 0.8 });
-    }
-  }, [center, map]);
-
-  return null;
-}
-
-export default function DashboardMap() {
+export default function   DashboardMap() {
   const [displays, setDisplays] = useState([]);
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState([]);
-
-  /* ✅ NEW STATE FOR CENTER */
   const [mapCenter, setMapCenter] = useState([11.0168, 76.9558]);
-
-  const mapRef = useRef(null);
 
   // 🔹 Load displays
   useEffect(() => {
@@ -79,9 +58,7 @@ export default function DashboardMap() {
       )}&limit=5`,
       {
         signal: controller.signal,
-        headers: {
-          "Accept-Language": "en",
-        },
+        headers: { "Accept-Language": "en" },
       }
     )
       .then((res) => res.json())
@@ -91,17 +68,31 @@ export default function DashboardMap() {
     return () => controller.abort();
   }, [search]);
 
-  // 🔹 When place selected (FIXED)
+  // 🔹 When place selected
   const handlePlaceSelect = (p) => {
     setSearch(p.display_name);
     setPlaces([]);
-
-    const lat = Number(p.lat);
-    const lon = Number(p.lon);
-
-    /* ✅ THIS IS THE KEY FIX */
-    setMapCenter([lat, lon]);
+    setMapCenter([Number(p.lat), Number(p.lon)]);
   };
+
+  // 🔹 Prepare markers for BaseMap
+  const mapMarkers = displays.map((d) => ({
+    position: [Number(d.latitude), Number(d.longitude)],
+    icon: d.method === "physical" ? blueIcon : yellowIcon,
+    popup: (
+      <>
+        <b>{d.displayName}</b>
+        <br />
+        <small>{d.deviceId}</small>
+        <hr />
+        📍 {d.locationName}
+        <br />
+        👷 {d.installerName || "Master"}
+        <br />
+        🟡 {d.method}
+      </>
+    ),
+  }));
 
   return (
     <div style={{ marginTop: 16 }}>
@@ -140,7 +131,6 @@ export default function DashboardMap() {
               }}
             />
 
-            {/* 🌍 PLACE SUGGESTIONS */}
             {places.length > 0 && (
               <div
                 style={{
@@ -174,38 +164,11 @@ export default function DashboardMap() {
           </div>
         </div>
 
-        {/* 🗺 MAP */}
-        <MapContainer
+        {/* 🗺 MAP (USING BASEMAP) */}
+        <BaseMap
           center={mapCenter}
-          zoom={11}
-          style={{ height: 420, width: "100%", borderRadius: 10 }}
-          whenCreated={(map) => (mapRef.current = map)}
-        >
-          {/* ✅ THIS LINE MAKES RECENTER WORK */}
-          <RecenterMap center={mapCenter} />
-
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-          {displays.map((d) => (
-            <Marker
-              key={d.deviceId}
-              position={[Number(d.latitude), Number(d.longitude)]}
-              icon={d.method === "physical" ? blueIcon : yellowIcon}
-            >
-              <Popup>
-                <b>{d.displayName}</b>
-                <br />
-                <small>{d.deviceId}</small>
-                <hr />
-                📍 {d.locationName}
-                <br />
-                👷 {d.installerName || "Master"}
-                <br />
-                🟡 {d.method}
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+          markers={mapMarkers}
+        />
       </div>
     </div>
   );
