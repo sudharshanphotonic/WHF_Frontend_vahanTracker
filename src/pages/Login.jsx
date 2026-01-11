@@ -135,9 +135,18 @@ export default function Login() {
   const handleLogin = async () => {
     console.log("LOGIN TRY:", username, password);
 
-    try {
+    // try {
+    //   const res = await axios.post(
+    //     "http://localhost:8000/login",
+    //     { username, password },
+    //     {
+    //       validateStatus: () => true, // ✅ prevents console error
+    //     }
+    //   );
+
+      try {
       const res = await axios.post(
-        "http://localhost:8000/login",
+        "https://whf-backend-vahan-tracker.vercel.app/login",
         { username, password },
         {
           validateStatus: () => true, // ✅ prevents console error
