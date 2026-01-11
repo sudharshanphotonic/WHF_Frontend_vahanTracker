@@ -36,7 +36,7 @@ import AddDisplay from "./pages/AddDisplay";
 import AddBus from "./pages/AddBus";
 import AddRoute from "./pages/AddRoute";
 import AddStops from "./pages/AddStops";
-import AddUser from "./pages/Adduser";
+import AddUser from "./pages/AddUser";
 
 import ProtectedRoute from "./ProtectedRoute";
 import BusDetails from "./components/BusDetails/BusDetails";
